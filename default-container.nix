@@ -24,10 +24,10 @@ pkgs.dockerTools.buildImage {
   copyToRoot = pkgs.buildEnv {
     name = "image-root";
     paths = with pkgs; [
-      bash
-      coreutils
-      gnugrep
-      gnused
+      # bash
+      # coreutils
+      # gnugrep
+      # gnused
       pydemo
     ];
     pathsToLink = [ "/bin" ];
