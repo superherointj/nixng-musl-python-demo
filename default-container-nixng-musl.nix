@@ -6,10 +6,6 @@
 
   config = ({ pkgs, config, ... }: {
     config = {
-      dumb-init = {
-        enable = true;
-        type.services = { };
-      };
       services.pydemo = {
         enable = true;
         package = pydemo;

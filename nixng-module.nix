@@ -10,6 +10,7 @@ let
 in
 
 {
+  ### OPTIONS ###
   options.services.pydemo = {
     enable = mkEnableOption "Enable ${name}";
 
@@ -19,13 +20,13 @@ in
       type = types.package;
     };
 
-    config = mkOption {
-      description = ''
-        Configuration options for ${name}.
-      '';
-      type = format.type;
-      default = {};
-    };
+    # config = mkOption {
+    #   description = ''
+    #     Configuration options for ${name}.
+    #   '';
+    #   type = format.type;
+    #   default = {};
+    # };
 
     user = mkOption {
       description = "${name} user.";
@@ -40,23 +41,54 @@ in
     };
   };
 
+  ### CONFIG ###
   config = mkIf cfg.enable {
-    init.services.${name} = {
-      enabled = true;
-      script = pkgs.writeShellScript "${name}-run"
-        ''
-          mkdir -p ${dataDir}/{.,storage,data,config}
 
-          chown -R ${cfg.user}:${cfg.group} ${dataDir}
-          chmod -R u=rwX,g=r-X,o= ${dataDir}
+    ###############
+    # Init System #
+    ###############
 
-          export PATH=$PATH:${cfg.package}/bin \
-                HOME=${dataDir}/storage
-
-          # chpst -u ${cfg.user}:${cfg.group} -b ${name} ${name} serve \
-          #   --config=${dataDir}/config
-        '';
+    dumb-init = {
+      enable = lib.mkDefault true;
+      type.services = lib.mkDefault { };
     };
+
+    init.services.pydemo = {
+      enabled = true;
+      script = pkgs.writeShellScript "pydemo-start.sh" ''
+        echo "Starting pydemo..."
+        ${cfg.package}/bin/pydemo
+        exit 0
+      '';
+      finish = pkgs.writeShellScript "pydemo-end.sh" ''
+        echo "Pydemo ended."
+        exit 0
+      '';
+      shutdownOnExit = true;
+    };
+
+    # init.services.${name} = {
+    #   enabled = true;
+    #   script = pkgs.writeShellScript "${name}-run"
+    #     ''
+    #       mkdir -p ${dataDir}/{.,storage,data,config}
+
+    #       chown -R ${cfg.user}:${cfg.group} ${dataDir}
+    #       chmod -R u=rwX,g=r-X,o= ${dataDir}
+
+    #       export PATH=$PATH:${cfg.package}/bin \
+    #             HOME=${dataDir}/storage
+
+    #       # chpst -u ${cfg.user}:${cfg.group} -b ${name} ${name} serve \
+    #       #   --config=${dataDir}/config
+    #     '';
+    # };
+
+    # runit = {
+    #   enable = false;
+    # };
+
+    ### End of Init System
 
     environment.systemPackages = with pkgs; [ cfg.package ];
 
@@ -72,5 +104,6 @@ in
     users.groups.${cfg.group} = mkDefaultRec {
       gid = 420; #config.ids.gids.pydemo;
     };
+
   };
 }

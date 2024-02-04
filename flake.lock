@@ -80,9 +80,7 @@
     },
     "nixpkgs-friendly-overlay": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1706889947,
@@ -93,8 +91,23 @@
         "type": "github"
       },
       "original": {
-        "owner": "nixpkgs-friendly",
-        "repo": "nixpkgs-friendly-overlay",
+        "id": "nixpkgs-friendly-overlay",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1706913249,
+        "narHash": "sha256-x3M7iV++CsvRXI1fpyFPduGELUckZEhSv0XWnUopAG8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e92b6015881907e698782c77641aa49298330223",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
