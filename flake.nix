@@ -51,15 +51,13 @@
               pydemo-container = callPackage ./default-container.nix { inherit pydemo; };
               pydemo-container-musl = thisPkgs.pkgsMusl.callPackage ./default-container.nix { pydemo = pydemo-musl; };
 
-              pydemo-container-nixng-musl = (nixng-import ./default-container-nixng-musl.nix {
+              pydemo-nixng-musl = (nixng-import ./default-container-nixng-musl.nix {
                 pkgs=pkgs.pkgsMusl;
                 pydemo=pydemo-musl;
                 inherit config lib;
-              }).config.system.build.ociImage.build;
-
-              # pydemo-container-nixng-musl = (nixng-import ./default-container-nixng.nix { pydemo=pydemo-musl; pkgs=pkgs.pkgsMusl; inherit config lib; }).config.system.build.ociImage.build;
-
-              # pydemo-nixng = (nixng-import ./default-container-nixng.nix { pydemo=pydemo; pkgs=pkgs.pkgsMusl; inherit config lib; }).config.system.build.toplevel;
+              }).config.system.build;
+              pydemo-container-nixng-musl = pydemo-nixng-musl.ociImage.build;
+              pydemo-toplevel-nixng-musl = pydemo-nixng-musl.toplevel;
             };
         in
          {

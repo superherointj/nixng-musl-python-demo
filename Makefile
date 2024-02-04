@@ -7,3 +7,6 @@ container-nixng-musl:
 	cat ./result | docker load
 	docker image ls pydemo:latest
 	docker run --rm pydemo:latest
+
+tree:
+	nix build .#pydemo-toplevel-nixng-musl; nix-tree ./result

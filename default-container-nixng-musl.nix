@@ -12,8 +12,9 @@
       };
       services.pydemo = {
         enable = true;
-        package = pydemo; # .override({ withSystemd = false; });
+        package = pydemo;
       };
     };
   });
+
 }
